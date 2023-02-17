@@ -14,4 +14,8 @@ t1.save()
 t2 = Test(a='', b='2342')
 t2.save()
 for obj in Test.objects.all():
-    print(obj.a)
+    pass
+    # print(obj.a)
+
+test_exists = Test.objects.exists(a='23', b='02:32')
+print(test_exists)

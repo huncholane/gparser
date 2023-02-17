@@ -24,3 +24,11 @@ class Manager:
 
     def count(self):
         return len(self.objects)
+
+    def exists(self, **kwargs):
+        cls = self.cls
+        newobj = cls(**kwargs)
+        for obj in self.objects:
+            if obj == newobj:
+                return True
+        return False

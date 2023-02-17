@@ -7,8 +7,11 @@ class Parser:
     id = IntField()
     objects = Manager()
 
+    class Meta:
+        unique_together = []
+
     def __init__(self, **kwargs):
-        self.objects.set_cls(self)
+        self.objects.set_cls(type(self))
         missing_fields = set(self.fields())-set(kwargs)
         if 'id' not in missing_fields:
             raise CreateWithIdParseError(self)
@@ -37,3 +40,10 @@ class Parser:
     def field_items(self):
         """Returns key value pairs for fields"""
         return self.fields().items()
+
+    def __eq__(self, obj):
+        matched = {key: False for key in set(self.__dict__)-{'id'}}
+        for key in matched:
+            if self.__dict__[key] == obj.__dict__[key]:
+                return True
+        return False not in matched.values()
