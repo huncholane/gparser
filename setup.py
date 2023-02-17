@@ -7,7 +7,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='ghostparser',
-    version='0.11',
+    version='0.12',
     author="Lane Henslee",
     author_email="huncho@ghostsystems.io",
     description="A django orm inspired parser.",
