@@ -8,7 +8,7 @@ def default_function(x):
 class Field:
     translator = default_function
 
-    def __init__(self, translator=None, unique=True):
+    def __init__(self, translator=None, unique=False):
         if translator:
             self.translator = translator
         self.unique = unique

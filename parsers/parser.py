@@ -26,6 +26,7 @@ class Parser:
             setattr(self, name, field.convert(kwargs[name]))
 
     def save(self):
+        self.objects.raise_unique_constraints()
         self.objects.append(self)
 
     def fields(self):

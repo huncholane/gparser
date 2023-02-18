@@ -16,3 +16,15 @@ class ExtraFieldsParseError(Exception):
 class CreateWithIdParseError(Exception):
     def __init__(self, cls):
         super().__init__(f'{cls} cannot use id on creation.')
+
+
+class UniqueFieldParseError(Exception):
+    def __init__(self, cls, field, value):
+        super().__init__(
+            f'{cls} requires {field} to be unique. Error on value {value}')
+
+
+class UniqueTogetherParseError(Exception):
+    def __init__(self, cls, fields, values):
+        super().__init__(
+            f'{cls} requires the fields {fields} to be unique together. Error on values {values}')

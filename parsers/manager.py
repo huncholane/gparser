@@ -1,4 +1,5 @@
 from .exceptions import *
+from .fields import Field
 
 
 class Manager:
@@ -32,3 +33,22 @@ class Manager:
             if obj == newobj:
                 return True
         return False
+
+    def raise_unique_constraints(self, **kwargs):
+        o2 = self.cls(**kwargs)
+        unique_fields = [key for key, val in o2.field_items() if val.unique]
+        unique_together = o2.Meta.unique_together
+        for o in self.objects:
+            for key in unique_fields:
+                if o[key] == o2[key]:
+                    raise UniqueFieldParseError(self.cls, key, o[key])
+            unique_together_violation = True
+            vals = []
+            for key in unique_together:
+                if o[key] != o2[key]:
+                    unique_together_violation = False
+                    break
+                else:
+                    vals.append(o[key])
+            if unique_together_violation:
+                raise UniqueTogetherParseError(self.cls, unique_together, vals)
