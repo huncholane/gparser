@@ -11,8 +11,18 @@ class Parser:
         unique_together = []
 
     def __init__(self, **kwargs):
-        self.unique_fields = [key for key,
-                              val in self.field_items() if val.unique]
+        self.unique_fields = []
+        for key, val in self.field_items():
+            if val.unique:
+                self.unique_fields.append(key)
+            if val.null:
+                kwargs[key] = kwargs.get(key)
+            if val.default:
+                if type(val.default) != val.type:
+                    raise TypeError(
+                        f'{key} default should be of type {val.type}')
+                if not kwargs.get(key):
+                    kwargs[key] = val.default
         self.objects.set_cls(type(self))
         missing_fields = set(self.fields())-set(kwargs)
         if 'id' not in missing_fields:
@@ -25,7 +35,11 @@ class Parser:
             raise ExtraFieldsParseError(self, extra_fields)
         kwargs['id'] = self.objects.count()
         for name, field in self.field_items():
-            setattr(self, name, field.convert(kwargs[name]))
+            val = kwargs[name]
+            if type(val) == str:
+                setattr(self, name, field.convert(val))
+            else:
+                setattr(self, name, val)
 
     def save(self):
         self.objects.raise_unique_constraints(self)
