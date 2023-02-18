@@ -15,7 +15,7 @@ class Manager:
         """Create and save object"""
         cls = self.cls
         obj = cls(**kwargs)
-        self.append(obj)
+        obj.save()
 
     def all(self):
         return self.objects
