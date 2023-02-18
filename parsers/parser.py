@@ -11,6 +11,8 @@ class Parser:
         unique_together = []
 
     def __init__(self, **kwargs):
+        self.unique_fields = [key for key,
+                              val in self.field_items() if val.unique]
         self.objects.set_cls(type(self))
         missing_fields = set(self.fields())-set(kwargs)
         if 'id' not in missing_fields:
@@ -26,7 +28,7 @@ class Parser:
             setattr(self, name, field.convert(kwargs[name]))
 
     def save(self):
-        self.objects.raise_unique_constraints()
+        self.objects.raise_unique_constraints(self)
         self.objects.append(self)
 
     def fields(self):

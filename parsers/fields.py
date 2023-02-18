@@ -1,7 +1,7 @@
 from . import translators
 
 
-def default_function(x):
+def default_function(cls, x):
     return x
 
 

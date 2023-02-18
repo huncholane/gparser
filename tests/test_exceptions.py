@@ -12,7 +12,7 @@ class Test(parsers.Parser):
         unique_together = ['a', 'b', 'c']
 
 
-def double_d():
+def raise_unique_error():
     t1 = Test(a='a1', b='b1', c='c1', d='d')
     t1.save()
     t2 = Test(a='a2', b='b2', c='c2', d='d')
@@ -27,4 +27,5 @@ def raise_unique_together():
 class TestExceptions(unittest.TestCase):
 
     def test_unique(self):
-        self.assertRaises(parsers.UniqueFieldParseError, double_d)
+        self.assertRaises(
+            parsers.exceptions.UniqueFieldParseError, raise_unique_error)

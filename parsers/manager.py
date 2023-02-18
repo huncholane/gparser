@@ -34,18 +34,19 @@ class Manager:
                 return True
         return False
 
-    def raise_unique_constraints(self, **kwargs):
-        o2 = self.cls(**kwargs)
-        unique_fields = [key for key, val in o2.field_items() if val.unique]
+    def raise_unique_constraints(self, o2):
+        unique_fields = o2.unique_fields
         unique_together = o2.Meta.unique_together
         for o in self.objects:
             for key in unique_fields:
-                if o[key] == o2[key]:
-                    raise UniqueFieldParseError(self.cls, key, o[key])
+                oval = o.__dict__[key]
+                o2val = o2.__dict__[key]
+                if o.__dict__[key] == o2.__dict__[key]:
+                    raise UniqueFieldParseError(self.cls, key, o.__dict__[key])
             unique_together_violation = True
             vals = []
             for key in unique_together:
-                if o[key] != o2[key]:
+                if o.__dict__[key] != o2.__dict__[key]:
                     unique_together_violation = False
                     break
                 else:
