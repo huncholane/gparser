@@ -50,6 +50,6 @@ class Manager:
                     unique_together_violation = False
                     break
                 else:
-                    vals.append(o[key])
+                    vals.append(o.__dict__[key])
             if unique_together_violation:
                 raise UniqueTogetherParseError(self.cls, unique_together, vals)
